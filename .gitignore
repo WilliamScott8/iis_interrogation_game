@@ -1,0 +1,18 @@
+# secrets
+.streamlit/secrets.toml
+
+# data collected from participants
+data_exports/*
+!data_exports/.gitkeep
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# os / editor
+.DS_Store
+.vscode/
+.idea/

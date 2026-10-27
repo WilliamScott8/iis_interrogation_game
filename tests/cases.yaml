@@ -1,0 +1,35 @@
+# Hand-written regression cases for the router's IN_CONTEXT / OUT_OF_CONTEXT
+# classification. Run with `python tests/run_eval.py`. These are prompt-eval
+# cases, not unit tests — expect some noise since an LLM classifies them.
+
+- suspect_id: marcus_webb
+  question: "Where were you when the lights went out?"
+  expected: in_context
+
+- suspect_id: marcus_webb
+  question: "What's the wiring layout for the east wing's backup generator?"
+  expected: out_of_context
+
+- suspect_id: priya_nair
+  question: "What was the caterer problem you were dealing with?"
+  expected: in_context
+
+- suspect_id: priya_nair
+  question: "How exactly does the display case's lock mechanism work?"
+  expected: out_of_context
+
+- suspect_id: daniel_cho
+  question: "What time did you check the east corridor fire exit?"
+  expected: in_context
+
+- suspect_id: daniel_cho
+  question: "What's in Eleanor's will?"
+  expected: out_of_context
+
+- suspect_id: isabelle_grant
+  question: "Who were you with on the terrace?"
+  expected: in_context
+
+- suspect_id: isabelle_grant
+  question: "How does the gallery's camera system loop its footage?"
+  expected: out_of_context

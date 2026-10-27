@@ -1,0 +1,81 @@
+# story_a.yaml
+# -----------------------------------------------------------------------------
+# A single self-contained case file. Everything the game needs to run one
+# playthrough lives here: the briefing shown to the player, the shared facts
+# every suspect is allowed to know, and the four suspect profiles.
+#
+# `guilty` and `behaviour_mode` encode the 2x2 experimental design:
+#   decline suspect   = refuses out-of-knowledge questions
+#   improvise suspect = fabricates a plausible answer to out-of-knowledge questions
+# One of each mode is innocent, one of each mode is guilty.
+# -----------------------------------------------------------------------------
+
+title: 
+
+case_briefing: 
+
+# Shown to the player on the evidence sheet screen, verbatim.
+evidence_sheet:
+  victim: 
+  stolen_item: 
+  location: 
+  theft_window: 
+  facts:
+
+# Facts every suspect is allowed to reference about the night in general
+# (shared context, injected into every suspect's system prompt).
+common_knowledge: 
+
+suspects:
+  - id: 
+    name: 
+    role: 
+    guilty: 
+    behaviour_mode: 
+    personality: 
+    background: 
+    knowledge_scope:
+    alibi_given_to_player: 
+    ground_truth: 
+    plot_holes: []
+    out_of_scope_examples:
+
+  - id: 
+    name: 
+    role: 
+    guilty: 
+    behaviour_mode: 
+    personality: 
+    background: 
+    knowledge_scope:
+    alibi_given_to_player: 
+    ground_truth: 
+    plot_holes: []
+    out_of_scope_examples:
+
+  - id: 
+    name: 
+    role: 
+    guilty: 
+    behaviour_mode: 
+    personality: 
+    background: 
+    knowledge_scope:
+    alibi_given_to_player: 
+    ground_truth: 
+    plot_holes:
+    out_of_scope_examples:
+
+  - id: 
+    name: 
+    role: 
+    guilty:
+    behaviour_mode: 
+    personality: 
+    background: 
+    knowledge_scope:
+    alibi_given_to_player: 
+    ground_truth: 
+    plot_holes:
+    out_of_scope_examples:
+

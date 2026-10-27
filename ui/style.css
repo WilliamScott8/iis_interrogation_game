@@ -1,0 +1,20 @@
+/* Light noir-detective styling layered on top of the Streamlit dark theme
+   set in .streamlit/config.toml. Injected via st.markdown in app.py. */
+
+h1, h2, h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: 0.02em;
+}
+
+div[data-testid="stChatMessage"] {
+    border-radius: 10px;
+    border: 1px solid rgba(192, 57, 41, 0.25);
+}
+
+button[kind="primary"], button[data-testid="baseButton-primary"] {
+    border-radius: 6px;
+}
+
+.stProgress > div > div {
+    background-color: #C0392B;
+}
