@@ -23,7 +23,7 @@ suspects fixed to a 2x2 design — guilt × behaviour:
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .streamlit/secrets.example.toml .streamlit/secrets.toml   # then edit it
+cp .streamlit/secrets_example.toml .streamlit/secrets.toml   # then edit it
 streamlit run app.py
 ```
 
@@ -43,7 +43,7 @@ iis_interrogation_game/
 ├── .streamlit/
 │   ├── config.toml             ← app theme (colours, font)
 │   ├── secrets.toml            ← real API keys, LOCAL ONLY (gitignored)
-│   └── secrets.example.toml    ← same layout with placeholder values (committed)
+│   └── secrets_example.toml    ← same layout with placeholder values (committed)
 │
 ├── backend/                    ← game logic; no Streamlit UI calls in here
 │   ├── __init__.py             ← shared `load_prompt()` helper
@@ -137,3 +137,36 @@ file and point `backend/session.py`'s `STORY_PATH` at it to run a different
 case without touching any other code, as long as the new file keeps exactly
 four suspects with `guilty` and `behaviour_mode` set per the 2x2 design
 above.
+
+## Git — committing your changes
+
+The repo is already initialised (`git init` has been run) with one commit
+in place. To save further changes:
+
+```bash
+git status                  # see what's changed
+git add <file> [<file> ...] # stage specific files (avoid `git add -A` if
+                             #   you're not sure what's changed — check
+                             #   `git status` first)
+git commit -m "short description of what changed and why"
+```
+
+A few things specific to this repo:
+
+- **Never commit `.streamlit/secrets.toml`** — it holds your real API key
+  and is already listed in `.gitignore`. If `git status` ever shows it as
+  trackable, stop and check your `.gitignore` before committing.
+- **Never commit anything under `data_exports/`** other than `.gitkeep` —
+  it's participant data from playtests, not source code, and is also
+  gitignored.
+- If you add a new prompt version (e.g. `router_v2.md`), add a dated entry
+  to `docs/prompt_log.md` in the same commit explaining what changed and
+  why.
+
+If you're working with a remote (e.g. a GitHub repo for submission):
+
+```bash
+git remote add origin <your-repo-url>   # first time only
+git push -u origin main                 # first push
+git push                                # subsequent pushes
+```
