@@ -1,4 +1,4 @@
-# The Ashworth Necklace — LLM Interrogation Game
+# LLM Interrogation Game
 
 A browser-based detective game built with Streamlit. The player interviews
 four LLM-powered suspects about a robbery and decides who is guilty,
@@ -11,12 +11,12 @@ player's confidence, trust, and verdict accuracy?
 Each playthrough uses the same case (`story/story_a.yaml`) with four
 suspects fixed to a 2x2 design — guilt × behaviour:
 
-| Suspect          | Guilt     | When asked something outside their knowledge |
+| Suspect           | Guilt     | When asked something outside their knowledge   |
 |-------------------|-----------|------------------------------------------------|
-| Marcus Webb       | Innocent  | Declines ("I don't know / can't say")          |
-| Priya Nair        | Innocent  | Improvises a plausible answer                  |
-| Daniel Cho        | Guilty    | Declines                                        |
-| Isabelle Grant    | Guilty    | Improvises                                      |
+| Suspect 1         | Innocent  | Declines ("I don't know / can't say")          |
+| Suspect 2         | Innocent  | Improvises a plausible answer                  |
+| Suspect 3         | Guilty    | Declines                                       |
+| Suspect 4         | Guilty    | Improvises                                     |
 
 ## Running it
 
