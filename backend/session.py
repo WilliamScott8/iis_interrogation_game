@@ -2,7 +2,7 @@
 Thin wrapper around st.session_state: owns the one-time setup of a
 playthrough (loading the story, building Suspect objects, generating an
 anonymous participant id) and the small bits of game state the UI screens
-read and write (current stage, selected suspect, verdicts).
+read and write (current stage, selected suspect, verdicts and confidence).
 """
 
 import uuid
@@ -15,7 +15,11 @@ from backend.suspect import Suspect
 
 STORY_PATH = Path(__file__).resolve().parent.parent / "story" / "story_a.yaml"
 
-STAGES = ("welcome", "evidence", "interrogation", "verdict", "summary")
+# "case" is a single tabbed screen holding the evidence sheet, interrogation
+# room and verdict form, so the player can move freely between them.
+STAGES = ("welcome", "case", "summary")
+
+DEFAULT_CONFIDENCE = 50
 
 
 def _load_story() -> dict:
@@ -37,6 +41,7 @@ def init_session() -> None:
     }
     st.session_state.current_suspect_id = story["suspects"][0]["id"]
     st.session_state.verdicts = {s["id"]: "undecided" for s in story["suspects"]}
+    st.session_state.confidences = {s["id"]: DEFAULT_CONFIDENCE for s in story["suspects"]}
 
 
 def get_story() -> dict:
@@ -61,6 +66,14 @@ def get_verdicts() -> dict[str, str]:
 
 def set_verdict(suspect_id: str, verdict: str) -> None:
     st.session_state.verdicts[suspect_id] = verdict
+
+
+def get_confidences() -> dict[str, int]:
+    return st.session_state.confidences
+
+
+def set_confidence(suspect_id: str, confidence: int) -> None:
+    st.session_state.confidences[suspect_id] = confidence
 
 
 def get_stage() -> str:

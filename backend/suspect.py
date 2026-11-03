@@ -8,7 +8,7 @@ per-question log that storage.py later exports for analysis.
 from llm.client import generate
 from backend import router, policy, validator, load_prompt
 
-MAX_QUESTIONS = 8
+MAX_QUESTIONS = 5
 
 _SUSPECT_TEMPLATE = load_prompt("suspect_v1.md")
 

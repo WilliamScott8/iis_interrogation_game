@@ -27,7 +27,7 @@ cp .streamlit/secrets_example.toml .streamlit/secrets.toml   # then edit it
 streamlit run app.py
 ```
 
-You need an Anthropic API key in `.streamlit/secrets.toml` (`[llm].api_key`).
+You need an API key in `.streamlit/secrets.toml` (`[llm].api_key`).
 Google Sheets export is optional — leave `[google_sheets].enabled = false`
 to only write local CSVs.
 
@@ -69,8 +69,9 @@ iis_interrogation_game/
 │   └── client.py                 ← thin Anthropic SDK wrapper: generate(system, messages)
 │
 ├── ui/                          ← everything the player sees
-│   ├── screens.py                ← one function per screen: welcome, evidence,
-│   │                                interrogation, verdict, summary
+│   ├── screens.py                ← one function per screen: welcome, case
+│   │                                (tabbed: evidence / interrogation /
+│   │                                verdict), summary
 │   ├── components.py             ← reusable render helpers (chat history,
 │   │                                question counter, evidence list, etc.)
 │   └── style.css                 ← noir-detective styling layered on the theme
@@ -126,7 +127,7 @@ iis_interrogation_game/
 
 With the player's explicit consent (collected on the welcome screen):
 all questions asked, all suspect responses, and the player's final verdict
-(guilty / innocent / undecided) per suspect — tagged only with a randomly
+(guilty / innocent / undecided) and their 0–100% confidence in it, per suspect — tagged only with a randomly
 generated, anonymous `participant_id`. No names or identifying information
 are collected. See `backend/storage.py`.
 

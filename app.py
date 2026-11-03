@@ -9,13 +9,7 @@ from pathlib import Path
 import streamlit as st
 
 from backend import session
-from ui.screens import (
-    evidence_screen,
-    interrogation_screen,
-    summary_screen,
-    verdict_screen,
-    welcome_screen,
-)
+from ui.screens import case_screen, summary_screen, welcome_screen
 
 st.set_page_config(page_title="The Ashworth Necklace", page_icon="🔍", layout="centered")
 
@@ -26,9 +20,7 @@ session.init_session()
 
 SCREENS = {
     "welcome": welcome_screen,
-    "evidence": evidence_screen,
-    "interrogation": interrogation_screen,
-    "verdict": verdict_screen,
+    "case": case_screen,
     "summary": summary_screen,
 }
 

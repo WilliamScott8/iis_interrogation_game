@@ -30,7 +30,12 @@ def build_conversation_rows(participant_id: str, suspects: dict[str, Suspect]) -
     return rows
 
 
-def build_verdict_rows(participant_id: str, suspects: dict[str, Suspect], verdicts: dict[str, str]) -> list[dict]:
+def build_verdict_rows(
+    participant_id: str,
+    suspects: dict[str, Suspect],
+    verdicts: dict[str, str],
+    confidences: dict[str, int],
+) -> list[dict]:
     timestamp = datetime.now(timezone.utc).isoformat()
     rows = []
     for suspect_id, suspect in suspects.items():
@@ -43,6 +48,8 @@ def build_verdict_rows(participant_id: str, suspects: dict[str, Suspect], verdic
             "guilty": suspect.guilty,
             "behaviour_mode": suspect.behaviour_mode,
             "verdict": verdict,
+            # 0-100; None when the player left the suspect undecided.
+            "confidence": None if verdict == "undecided" else confidences[suspect_id],
             "correct": verdict == ("guilty" if suspect.guilty else "innocent"),
             "questions_asked": len(suspect.log),
         })
@@ -58,12 +65,22 @@ def _append_csv(path: Path, rows: list[dict]) -> None:
     new_df.to_csv(path, index=False)
 
 
-def save_local(participant_id: str, suspects: dict[str, Suspect], verdicts: dict[str, str]) -> None:
+def save_local(
+    participant_id: str,
+    suspects: dict[str, Suspect],
+    verdicts: dict[str, str],
+    confidences: dict[str, int],
+) -> None:
     _append_csv(CONVERSATIONS_CSV, build_conversation_rows(participant_id, suspects))
-    _append_csv(VERDICTS_CSV, build_verdict_rows(participant_id, suspects, verdicts))
+    _append_csv(VERDICTS_CSV, build_verdict_rows(participant_id, suspects, verdicts, confidences))
 
 
-def export_to_sheets(participant_id: str, suspects: dict[str, Suspect], verdicts: dict[str, str]) -> None:
+def export_to_sheets(
+    participant_id: str,
+    suspects: dict[str, Suspect],
+    verdicts: dict[str, str],
+    confidences: dict[str, int],
+) -> None:
     """Best-effort mirror to Google Sheets. No-ops if not configured."""
     config = st.secrets.get("google_sheets", {})
     if not config.get("enabled"):
@@ -82,5 +99,5 @@ def export_to_sheets(participant_id: str, suspects: dict[str, Suspect], verdicts
         conversation_sheet.append_row([str(v) for v in row.values()])
 
     verdict_sheet = spreadsheet.worksheet("verdicts")
-    for row in build_verdict_rows(participant_id, suspects, verdicts):
+    for row in build_verdict_rows(participant_id, suspects, verdicts, confidences):
         verdict_sheet.append_row([str(v) for v in row.values()])
