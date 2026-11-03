@@ -2,7 +2,7 @@
    set in .streamlit/config.toml. Injected via st.markdown in app.py. */
 
 h1, h2, h3 {
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: sans-serif;
     letter-spacing: 0.02em;
 }
 
