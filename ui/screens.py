@@ -74,8 +74,8 @@ def _evidence_tab() -> None:
     st.divider()
     st.info(
         f"You may ask each of the four suspects up to {MAX_QUESTIONS} questions, "
-        "in any order. Use plain English — ask whatever you'd ask a real suspect. "
-        "Switch between the tabs above at any time; submit from the Verdict Form "
+        "in any order. Use plain English, and ask whatever you'd ask a real suspect. "
+        "Switch between the tabs above at any time, and submit from the Verdict Form "
         "when you're ready."
     )
 
