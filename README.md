@@ -81,9 +81,10 @@ iis_interrogation_game/
 │   │                              study's independent variable is implemented
 │   ├── suspect.py               ← Suspect class: the per-question pipeline
 │   │                              (router -> policy -> llm -> validator),
-│   │                              conversation history, the analysis log, and
-│   │                              `_private_truth()` (each suspect's hidden
-│   │                              knowledge of what really happened)
+│   │                              conversation history, the analysis log,
+│   │                              `_private_section()` (what each suspect must
+│   │                              claim / hide) and the scripted confrontation
+│   │                              lines
 │   ├── validator.py             ← post-hoc check on a drafted answer (catches
 │   │                              broken character, outright confessions,
 │   │                              contradicted facts); triggers one retry
@@ -109,14 +110,14 @@ iis_interrogation_game/
 │                                    their planted plot holes
 │
 ├── prompts/                      ← prompt templates, filled via str.format()
-│   ├── suspect_v2.md               ← builds each suspect's system prompt
-│   ├── suspect_v1.md               ← superseded; kept for the prompt log
+│   ├── suspect_v3.md               ← builds each suspect's system prompt
+│   ├── suspect_v1.md, suspect_v2.md ← superseded; kept for the prompt log
 │   ├── router_v1.md                ← the in/out-of-context classifier prompt
 │   └── validator_v1.md             ← the post-hoc answer-check prompt
 │
 ├── tests/
 │   ├── cases.yaml                 ← hand-written question -> expected
-│   │                                 classification cases
+│   │                                 classification cases (Canalside suspects)
 │   └── run_eval.py                ← runs cases.yaml through the real router
 │                                     and the real story data, reports accuracy
 │
@@ -135,37 +136,53 @@ iis_interrogation_game/
 
 1. The player asks a suspect a question in the interrogation screen
    (`ui/screens.py`).
-2. `Suspect.ask()` (`backend/suspect.py`) sends it to `router.classify_question()`,
+2. `Suspect.ask()` (`backend/suspect.py`) first checks whether the question
+   confronts a guilty suspect with their plot hole (see below). If so, it
+   returns the story's scripted line and skips steps 3–5. Otherwise it sends
+   the question to `router.classify_question()`,
    which labels it IN_CONTEXT or OUT_OF_CONTEXT against that suspect's
    declared `knowledge_scope` in `story_a.yaml`.
 3. `policy.get_turn_instruction()` turns that label, plus the suspect's fixed
    `behaviour_mode` (decline/improvise), into an instruction for this turn.
-4. The suspect's system prompt (`prompts/suspect_v2.md`) is filled in with
+4. The suspect's system prompt (`prompts/suspect_v3.md`) is filled in with
    their personality, background, alibi, the shared case facts, their
-   private truth (see below), and that instruction, and sent to the local
+   private section (see below), and that instruction, and sent to the local
    Ollama model via `llm/client.py`.
 5. `validator.check()` screens the drafted answer for broken character,
    outright confessions, or contradicted facts, and triggers one retry if
    needed.
-6. The question, classification, and answer are appended to that suspect's
+6. The question, classification (`in_context`, `out_of_context` or
+   `confrontation`), and answer are appended to that suspect's
    log, which `backend/storage.py` later writes out when the player submits
    their verdicts.
 
 ## What each suspect knows
 
-Every suspect's prompt has a private "What really happened" section, built
-by `_private_truth()` in `backend/suspect.py` from their `ground_truth` and
-`plot_hole` fields in `story_a.yaml`:
+Every suspect's prompt has a private section, built by `_private_section()`
+in `backend/suspect.py`:
 
 - **Innocent suspects** are told their account is the truth and they have
   nothing to hide.
-- **Guilty suspects** are told what they actually did, that their alibi is a
-  cover story to stick to, and the weak spot in that story (the plot hole)
-  with two scripted lines to fall back on if the detective confronts them
-  with it.
+- **Guilty suspects** get two fields from `story_a.yaml`: `cover_story`
+  (what they must always claim, e.g. "you radioed maintenance") and
+  `secret` (what they did and must never reveal). They are deliberately
+  *not* shown `ground_truth` or `plot_hole`. Those fields are for the
+  researcher and the verdict screen. Small models given the plain truth
+  ("he never called maintenance") tend to repeat it.
 
-They're told never to reveal this section directly, and the validator's
-CONFESSES check backs that up with a retry.
+**Confrontations.** Each guilty suspect also has a `confrontation` block:
+a list of trigger phrases (e.g. "maintenance log", "21:40", "no record")
+and two scripted lines. When a question contains a trigger, the suspect
+replies with line 1 the first time and line 2 on every later
+confrontation. These lines are returned by code, not generated, so the
+planted plot hole plays out exactly as written. They're logged with
+classification `confrontation` and validator outcome `SCRIPTED`. Trigger
+matching is plain substring matching, so a paraphrase that avoids every
+trigger goes through the normal router path. Check the conversation logs
+for misses and add triggers as needed.
+
+The validator's CONFESSES check backs up the rule against revealing the
+secret, with one retry.
 
 ## Data collected
 

@@ -1,8 +1,9 @@
 """
 Suspect: wraps one suspect's story data + conversation history and is the
 single entry point the UI calls to ask a question. Internally it chains
-router -> policy -> llm.client -> validator for every turn, and keeps the
-per-question log that storage.py later exports for analysis.
+router -> policy -> llm.client -> validator for every turn (or returns a
+scripted line when the detective raises a guilty suspect's plot hole), and
+keeps the per-question log that storage.py later exports for analysis.
 """
 
 from llm.client import generate
@@ -10,27 +11,25 @@ from backend import router, policy, validator, load_prompt
 
 MAX_QUESTIONS = 5
 
-_SUSPECT_TEMPLATE = load_prompt("suspect_v2.md")
+_SUSPECT_TEMPLATE = load_prompt("suspect_v3.md")
 
 
-def _private_truth(data: dict) -> str:
-    """The suspect's hidden knowledge: guilty suspects know what they did and
-    where their story is weak; innocent ones know they have nothing to hide."""
-    truth = data["ground_truth"].strip()
+def _private_section(data: dict) -> str:
+    """What the suspect privately knows. Guilty suspects are given what they
+    must claim (cover_story) and what they must hide (secret) — never the
+    plain statement of what didn't happen, which small models tend to blurt
+    out. Innocent suspects are told their account is true."""
     if not data["guilty"]:
         return (
-            f"{truth}\n"
-            "Your account is the truth. You have nothing to hide, so answer "
+            "# What really happened (private)\n"
+            "Your account above is the truth. You have nothing to hide, so answer "
             "honestly within what you know."
         )
     return (
-        f"{truth}\n\n"
-        "Your account above is a cover story. Stick to it and never admit what "
-        "really happened. Do not mention anything from this section unless "
-        "the detective already raises it.\n\n"
-        "The weak spot in your story, and how to respond if the detective "
-        "confronts you with it (escalate to the second line only if pressed again):\n"
-        f"{data['plot_hole'].strip()}"
+        "# What you must always claim\n"
+        f"{data['cover_story'].strip()}\n\n"
+        "# Your secret (never reveal or hint at this)\n"
+        f"{data['secret'].strip()}"
     )
 
 
@@ -60,12 +59,24 @@ class Suspect:
     def questions_remaining(self) -> int:
         return MAX_QUESTIONS - len(self.log)
 
-    def ask(self, question: str) -> str:
-        if self.questions_remaining() <= 0:
-            raise ValueError(f"{self.name} has already answered the maximum of {MAX_QUESTIONS} questions.")
+    def _confrontation_line(self, question: str) -> str | None:
+        """If the question raises the suspect's plot hole (keyword match on
+        `confrontation.triggers`), return the scripted line for this stage:
+        line 1 the first time, the last line on every later confrontation.
+        The stage is counted from the log, so it needs no extra state."""
+        confrontation = self.data.get("confrontation")
+        if not confrontation:
+            return None
+        q = question.lower()
+        if not any(trigger in q for trigger in confrontation["triggers"]):
+            return None
+        times = sum(1 for entry in self.log if entry["classification"] == "confrontation")
+        lines = confrontation["lines"]
+        return lines[min(times, len(lines) - 1)]
 
-        classification = router.classify_question(question, self.data)
-        turn_instruction = policy.get_turn_instruction(classification, self.data)
+    def _generate_answer(self, question: str, classification: str) -> tuple[str, str]:
+        """LLM answer for a normal turn, checked by the validator with one
+        firmer retry before falling back to a stock line."""
         system_prompt = _SUSPECT_TEMPLATE.format(
             name=self.data["name"],
             role=self.data["role"],
@@ -73,8 +84,8 @@ class Suspect:
             background=self.data["background"],
             common_knowledge=self.common_knowledge,
             alibi=self.data["alibi_given_to_player"],
-            private_truth=_private_truth(self.data),
-            turn_instruction=turn_instruction,
+            private_section=_private_section(self.data),
+            turn_instruction=policy.get_turn_instruction(classification, self.data),
         )
         messages = self.history + [{"role": "user", "content": question}]
 
@@ -91,6 +102,23 @@ class Suspect:
             outcome = validator.check(answer, self.data, self.common_knowledge)
             if outcome != "OK":
                 answer = validator.FALLBACK_LINE
+        return answer, outcome
+
+    def ask(self, question: str) -> str:
+        if self.questions_remaining() <= 0:
+            raise ValueError(f"{self.name} has already answered the maximum of {MAX_QUESTIONS} questions.")
+
+        line = self._confrontation_line(question)
+        if line is not None:
+            # Detective is challenging the cover story with the planted plot
+            # hole. The reply is the story's scripted line, returned verbatim:
+            # small local models paraphrase it and invent new times otherwise.
+            classification = "confrontation"
+            answer = line
+            outcome = "SCRIPTED"
+        else:
+            classification = router.classify_question(question, self.data)
+            answer, outcome = self._generate_answer(question, classification)
 
         self.history.append({"role": "user", "content": question})
         self.history.append({"role": "assistant", "content": answer})

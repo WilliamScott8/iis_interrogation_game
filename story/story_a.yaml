@@ -133,7 +133,8 @@ suspects:
     background: "38. Six years at the Canalside. Motive players can find by asking: she is going through a divorce and has to sell her house."
     knowledge_scope:
       - "Her night: in the cage all night except her two openings; break 04:00 to 04:30."
-      - "Opening 3 (table drop, with Danny): her cover story (see alibi). She wrote 'Box 6 lock stiff' on the drop slip."
+      - "Opening 3 (table drop, with Danny, 01:10 to 01:21, 11 min): she says the box 6 lock jammed, Danny radioed maintenance and they talked him through freeing it, so the drop ran long. She wrote 'Box 6 lock stiff' on the drop slip."
+      - "Anything about what happened during her own two openings: who did what, why they took as long as they did."
       - "Opening 4 (cage refill, with Jade): the counting machine jammed partway through; they cleared it and re-ran the count. This is true."
       - "Safe procedure from a cashier's point of view: the two-key rule, drops and refills."
     alibi_given_to_player: |
@@ -152,11 +153,26 @@ suspects:
       call log shows only one call that night, at 21:40, about a leaking tap.
       Confrontation line 1: "Then the log's wrong. I heard him on the radio."
       Confrontation line 2: "Maybe he sorted it himself. I was busy with the bags, I didn't watch him the whole time."
+    secret: |
+      You and Danny took the £20,000 during the 01:10 table drop and hid it in an
+      empty playing-card box marked for shredding. Nobody must ever find this out.
+    cover_story: |
+      Always say this, every time it comes up: the box 6 lock jammed during the
+      01:10 drop. Danny radioed maintenance and they talked him through freeing
+      it, which is why the drop took a while. You noted "Box 6 lock stiff" on the
+      drop slip. You were busy with the cash bags while Danny dealt with the lock.
+    confrontation:
+      triggers: ["maintenance log", "call log", "radio log", "no call", "only one call",
+                 "leaking tap", "21:40", "no record", "never called",
+                 "didn't call", "didn't radio", "never radioed", "no radio"]
+      lines:
+        - "Then the log's wrong. I heard him on the radio."
+        - "Maybe he sorted it himself. I was busy with the bags, I didn't watch him the whole time."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
       - "Why did the 00:40 jackpot payout take nine minutes?"
-      - "Has that drop box lock jammed before?"
-      - "Has the counting machine jammed before?"
+      - "Has the box 6 lock jammed on previous nights?"
+      - "Has the counting machine jammed on previous nights?"
       - "Who was the man asking at the cage window about shift times?"
       - "Did you notice the lights dip at quarter past midnight?"
       - "Is anyone on the staff short of money?"
@@ -171,7 +187,8 @@ suspects:
     knowledge_scope:
       - "His night: supervising the gaming tables; break 04:30 to 05:00."
       - "Opening 2 (jackpot payout, with Neil): the winner had no ID, so they waited while he fetched his driving licence from his car. This is true."
-      - "Opening 3 (table drop, with Sarah): his cover story (see alibi)."
+      - "Opening 3 (table drop, with Sarah, 01:10 to 01:21, 11 min): he says the box 6 lock jammed, he radioed maintenance and they talked him through freeing it, so the drop ran long."
+      - "Anything about what happened during his own two openings: who did what, why they took as long as they did."
       - "Safe procedure from a pit boss's point of view: the two-key rule and table drops."
     alibi_given_to_player: |
       "Two for me. The jackpot with Neil: the lucky fella had no ID, so we stood there
@@ -189,11 +206,26 @@ suspects:
       log shows only one call that night, at 21:40, about a leaking tap.
       Confrontation line 1: "The radio log's wrong, it drops calls all the time."
       Confrontation line 2: "Maybe I sorted it myself and didn't need to call."
+    secret: |
+      You and Sarah took the £20,000 during the 01:10 table drop and hid it in an
+      empty playing-card box marked for shredding. At the end of your shift you
+      took the box from the shredding bin to your car. Nobody must ever find this out.
+    cover_story: |
+      Always say this, every time it comes up: the box 6 lock jammed solid during
+      the 01:10 drop. You radioed maintenance and they talked you through freeing
+      it, which is why the drop ran a few minutes long.
+    confrontation:
+      triggers: ["maintenance log", "call log", "radio log", "no call", "only one call",
+                 "leaking tap", "21:40", "no record", "never called",
+                 "didn't call", "didn't radio", "never radioed", "no radio"]
+      lines:
+        - "The radio log's wrong, it drops calls all the time."
+        - "Maybe I sorted it myself and didn't need to call."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
       - "Why did the 02:30 refill take nine minutes?"
       - "Was the jackpot winner a regular?"
-      - "Has that drop box lock jammed before?"
+      - "Has the box 6 lock jammed on previous nights?"
       - "Did you see who propped the staff exit open at 03:20?"
       - "Did you notice the lights dip at quarter past midnight?"
       - "Is anyone on the staff short of money?"

@@ -7,7 +7,7 @@ or to a suspect's knowledge_scope / out_of_scope_examples.
 
 Usage:
     python tests/run_eval.py
-Requires a valid API key in .streamlit/secrets.toml.
+Requires Ollama running locally with the model set in .streamlit/secrets.toml.
 """
 
 import sys

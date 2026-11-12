@@ -7,7 +7,7 @@ actually implemented.
 
 _IN_CONTEXT_INSTRUCTION = (
     "Answer this question naturally and in character, consistent with your "
-    "account above."
+    "account of your movements (and, if you have one, what you must always claim)."
 )
 
 _DECLINE_INSTRUCTION = (

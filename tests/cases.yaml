@@ -1,35 +1,71 @@
 # Hand-written regression cases for the router's IN_CONTEXT / OUT_OF_CONTEXT
 # classification. Run with `python tests/run_eval.py`. These are prompt-eval
 # cases, not unit tests — expect some noise since an LLM classifies them.
+#
+# Note: questions that raise a guilty suspect's plot hole (e.g. the
+# maintenance log) never reach the router — Suspect.ask() catches them with
+# `confrontation.triggers` first — so they are not tested here.
 
-- suspect_id: marcus_webb
-  question: "Where were you when the lights went out?"
+# --- Neil (innocent, decline) ---
+- suspect_id: neil
+  question: "Why did the VIP deposit take ten minutes?"
   expected: in_context
 
-- suspect_id: marcus_webb
-  question: "What's the wiring layout for the east wing's backup generator?"
+- suspect_id: neil
+  question: "What happened during the jackpot payout?"
+  expected: in_context
+
+- suspect_id: neil
+  question: "Why did the 01:10 table drop take eleven minutes?"
   expected: out_of_context
 
-- suspect_id: priya_nair
-  question: "What was the caterer problem you were dealing with?"
+# --- Jade (innocent, improvise) ---
+- suspect_id: jade
+  question: "What went wrong during the cage refill?"
   expected: in_context
 
-- suspect_id: priya_nair
-  question: "How exactly does the display case's lock mechanism work?"
+- suspect_id: jade
+  question: "Why did the jackpot payout take nine minutes?"
   expected: out_of_context
 
-- suspect_id: daniel_cho
-  question: "What time did you check the east corridor fire exit?"
+# --- Sarah (guilty, decline) — the drop she did with Danny ---
+- suspect_id: sarah
+  question: "Did you radio maintenance about the box 6 lock?"
   expected: in_context
 
-- suspect_id: daniel_cho
-  question: "What's in Eleanor's will?"
+- suspect_id: sarah
+  question: "Who fixed the jammed lock on the drop?"
+  expected: in_context
+
+- suspect_id: sarah
+  question: "Why did the table drop take 11 minutes?"
+  expected: in_context
+
+- suspect_id: sarah
+  question: "Has the box 6 lock jammed on previous nights?"
   expected: out_of_context
 
-- suspect_id: isabelle_grant
-  question: "Who were you with on the terrace?"
+- suspect_id: sarah
+  question: "What happened at the 23:02 VIP deposit?"
+  expected: out_of_context
+
+# --- Danny (guilty, improvise) — the drop he did with Sarah ---
+- suspect_id: danny
+  question: "Did you radio maintenance about the box 6 lock?"
   expected: in_context
 
-- suspect_id: isabelle_grant
-  question: "How does the gallery's camera system loop its footage?"
+- suspect_id: danny
+  question: "Who fixed the jammed lock on the drop?"
+  expected: in_context
+
+- suspect_id: danny
+  question: "Why did the table drop take 11 minutes?"
+  expected: in_context
+
+- suspect_id: danny
+  question: "Why did the 02:30 refill take nine minutes?"
+  expected: out_of_context
+
+- suspect_id: danny
+  question: "Did you see who propped the staff exit open at 03:20?"
   expected: out_of_context
