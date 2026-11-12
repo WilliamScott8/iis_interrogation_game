@@ -134,7 +134,7 @@ def _verdict_tab() -> None:
     if st.button("Submit final verdicts", type="primary"):
         pid = st.session_state.participant_id
         args = (pid, suspects, session.get_verdicts(), session.get_confidences())
-        storage.save_local(*args)
+        # storage.save_local(*args)
         storage.export_to_sheets(*args)
         session.set_stage("summary")
         st.rerun()

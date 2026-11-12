@@ -1,8 +1,10 @@
 # LLM Interrogation Game
 
 A browser-based detective game built with Streamlit. The player interviews
-four LLM-powered suspects about a robbery and decides who is guilty,
-innocent, or undecided.
+four LLM-powered suspects about £20,000 missing from a casino safe ("The
+Night at the Canalside") and decides who is guilty, innocent, or undecided.
+The suspects run on a local model through [Ollama](https://ollama.com), so
+no API key or internet connection is needed.
 
 **Research question:** when an LLM-powered NPC is asked a question beyond
 its given knowledge, does *declining* or *improvising* an answer affect the
@@ -13,21 +15,42 @@ suspects fixed to a 2x2 design — guilt × behaviour:
 
 | Suspect           | Guilt     | When asked something outside their knowledge   |
 |-------------------|-----------|------------------------------------------------|
-| Suspect 1         | Innocent  | Declines ("I don't know / can't say")          |
-| Suspect 2         | Innocent  | Improvises a plausible answer                  |
-| Suspect 3         | Guilty    | Declines                                       |
-| Suspect 4         | Guilty    | Improvises                                     |
+| Neil Ashcroft     | Innocent  | Declines ("I don't know / can't say")          |
+| Jade Okafor       | Innocent  | Improvises a plausible answer                  |
+| Sarah Lyle        | Guilty    | Declines                                       |
+| Danny Reeve       | Guilty    | Improvises                                     |
 
 ## Running it
 
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .streamlit/secrets_example.toml .streamlit/secrets.toml   # then edit it
-streamlit run app.py
+1. Install Ollama from <https://ollama.com> and pull the model:
+
+   ```bash
+   ollama pull llama3.2:3b
+   ```
+
+2. Set up the project and run it (keep the Ollama app, or `ollama serve`,
+   running in the background):
+
+   ```bash
+   python3 -m venv .venv && source .venv/bin/activate
+   pip install -r requirements.txt
+   cp .streamlit/secrets_example.toml .streamlit/secrets.toml
+   streamlit run app.py
+   ```
+
+The model is set in `.streamlit/secrets.toml`:
+
+```toml
+[llm]
+provider = "ollama"
+model = "llama3.2:3b"              # any model you've pulled with `ollama pull`
+host = "http://localhost:11434"   # Ollama's default address
 ```
 
-You need an API key in `.streamlit/secrets.toml` (`[llm].api_key`).
+A larger model (e.g. `llama3.1:8b` or `qwen2.5:7b`) follows the router and
+validator's one-word instructions more reliably and keeps answers shorter,
+at the cost of speed.
+
 Google Sheets export is optional — leave `[google_sheets].enabled = false`
 to only write local CSVs.
 
@@ -42,7 +65,8 @@ iis_interrogation_game/
 │
 ├── .streamlit/
 │   ├── config.toml             ← app theme (colours, font)
-│   ├── secrets.toml            ← real API keys, LOCAL ONLY (gitignored)
+│   ├── secrets.toml            ← model settings + Google Sheets credentials,
+│   │                              LOCAL ONLY (gitignored)
 │   └── secrets_example.toml    ← same layout with placeholder values (committed)
 │
 ├── backend/                    ← game logic; no Streamlit UI calls in here
@@ -57,7 +81,9 @@ iis_interrogation_game/
 │   │                              study's independent variable is implemented
 │   ├── suspect.py               ← Suspect class: the per-question pipeline
 │   │                              (router -> policy -> llm -> validator),
-│   │                              conversation history, and the analysis log
+│   │                              conversation history, the analysis log, and
+│   │                              `_private_truth()` (each suspect's hidden
+│   │                              knowledge of what really happened)
 │   ├── validator.py             ← post-hoc check on a drafted answer (catches
 │   │                              broken character, outright confessions,
 │   │                              contradicted facts); triggers one retry
@@ -65,8 +91,8 @@ iis_interrogation_game/
 │                                   log and verdicts to data_exports/*.csv,
 │                                   and optionally mirrors them to Google Sheets
 │
-├── llm/                         ← the only place that talks to the model API
-│   └── client.py                 ← thin Anthropic SDK wrapper: generate(system, messages)
+├── llm/                         ← the only place that talks to the model
+│   └── client.py                 ← thin Ollama wrapper: generate(system, messages)
 │
 ├── ui/                          ← everything the player sees
 │   ├── screens.py                ← one function per screen: welcome, case
@@ -83,7 +109,8 @@ iis_interrogation_game/
 │                                    their planted plot holes
 │
 ├── prompts/                      ← prompt templates, filled via str.format()
-│   ├── suspect_v1.md               ← builds each suspect's system prompt
+│   ├── suspect_v2.md               ← builds each suspect's system prompt
+│   ├── suspect_v1.md               ← superseded; kept for the prompt log
 │   ├── router_v1.md                ← the in/out-of-context classifier prompt
 │   └── validator_v1.md             ← the post-hoc answer-check prompt
 │
@@ -113,15 +140,32 @@ iis_interrogation_game/
    declared `knowledge_scope` in `story_a.yaml`.
 3. `policy.get_turn_instruction()` turns that label, plus the suspect's fixed
    `behaviour_mode` (decline/improvise), into an instruction for this turn.
-4. The suspect's system prompt (`prompts/suspect_v1.md`) is filled in with
-   their background, alibi, and that instruction, and sent to
-   `llm/client.py`.
+4. The suspect's system prompt (`prompts/suspect_v2.md`) is filled in with
+   their personality, background, alibi, the shared case facts, their
+   private truth (see below), and that instruction, and sent to the local
+   Ollama model via `llm/client.py`.
 5. `validator.check()` screens the drafted answer for broken character,
    outright confessions, or contradicted facts, and triggers one retry if
    needed.
 6. The question, classification, and answer are appended to that suspect's
    log, which `backend/storage.py` later writes out when the player submits
    their verdicts.
+
+## What each suspect knows
+
+Every suspect's prompt has a private "What really happened" section, built
+by `_private_truth()` in `backend/suspect.py` from their `ground_truth` and
+`plot_hole` fields in `story_a.yaml`:
+
+- **Innocent suspects** are told their account is the truth and they have
+  nothing to hide.
+- **Guilty suspects** are told what they actually did, that their alibi is a
+  cover story to stick to, and the weak spot in that story (the plot hole)
+  with two scripted lines to fall back on if the detective confronts them
+  with it.
+
+They're told never to reveal this section directly, and the validator's
+CONFESSES check backs that up with a retry.
 
 ## Data collected
 
@@ -154,8 +198,8 @@ git commit -m "short description of what changed and why"
 
 A few things specific to this repo:
 
-- **Never commit `.streamlit/secrets.toml`** — it holds your real API key
-  and is already listed in `.gitignore`. If `git status` ever shows it as
+- **Never commit `.streamlit/secrets.toml`** — it holds your Google Sheets
+  service-account key and is already listed in `.gitignore`. If `git status` ever shows it as
   trackable, stop and check your `.gitignore` before committing.
 - **Never commit anything under `data_exports/`** other than `.gitkeep` —
   it's participant data from playtests, not source code, and is also

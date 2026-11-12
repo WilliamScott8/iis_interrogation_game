@@ -3,3 +3,4 @@ pyyaml>=6.0
 pandas>=2.2
 gspread>=6.1
 google-auth>=2.34
+ollama>=0.4

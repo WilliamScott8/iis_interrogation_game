@@ -26,7 +26,7 @@ evidence_sheet:
   stolen_item: "£20,000 in cash from the back-room safe"
   location: "The back room behind the cage (cash desk)"
   theft_window: 22:00 on the 5th November - 06:00 on the 6th November
-  facts: |
+  facts:
     - "22:00 shift-handover count: safe balanced."
     - "Safe rule: one cage person and one floor person must open it together. A normal opening takes about 3 minutes."
     - "Safe log, opening 1: 23:02 to 23:12 (10 min). Paperwork: VIP cash deposit, Neil Ashcroft + Jade Okafor."

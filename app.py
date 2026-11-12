@@ -11,7 +11,7 @@ import streamlit as st
 from backend import session
 from ui.screens import case_screen, summary_screen, welcome_screen
 
-st.set_page_config(page_title="The Ashworth Necklace", page_icon="🔍", layout="centered")
+st.set_page_config(page_title="The Night at the Canalside", page_icon="🔍", layout="centered")
 
 css_path = Path(__file__).resolve().parent / "ui" / "style.css"
 st.markdown(f"<style>{css_path.read_text()}</style>", unsafe_allow_html=True)

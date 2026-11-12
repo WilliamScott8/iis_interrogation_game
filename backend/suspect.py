@@ -10,7 +10,28 @@ from backend import router, policy, validator, load_prompt
 
 MAX_QUESTIONS = 5
 
-_SUSPECT_TEMPLATE = load_prompt("suspect_v1.md")
+_SUSPECT_TEMPLATE = load_prompt("suspect_v2.md")
+
+
+def _private_truth(data: dict) -> str:
+    """The suspect's hidden knowledge: guilty suspects know what they did and
+    where their story is weak; innocent ones know they have nothing to hide."""
+    truth = data["ground_truth"].strip()
+    if not data["guilty"]:
+        return (
+            f"{truth}\n"
+            "Your account is the truth. You have nothing to hide, so answer "
+            "honestly within what you know."
+        )
+    return (
+        f"{truth}\n\n"
+        "Your account above is a cover story. Stick to it and never admit what "
+        "really happened. Do not mention anything from this section unless "
+        "the detective already raises it.\n\n"
+        "The weak spot in your story, and how to respond if the detective "
+        "confronts you with it (escalate to the second line only if pressed again):\n"
+        f"{data['plot_hole'].strip()}"
+    )
 
 
 class Suspect:
@@ -52,6 +73,7 @@ class Suspect:
             background=self.data["background"],
             common_knowledge=self.common_knowledge,
             alibi=self.data["alibi_given_to_player"],
+            private_truth=_private_truth(self.data),
             turn_instruction=turn_instruction,
         )
         messages = self.history + [{"role": "user", "content": question}]

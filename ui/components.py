@@ -25,8 +25,6 @@ def suspect_tabs(suspects: dict[str, Suspect]) -> list[str]:
 
 
 def evidence_list(facts: list[str]) -> None:
-    # TESTING
-    facts = ["Fact 1", "Fact 2", "Fact 3", "Fact 4"]
     for fact in facts:
         st.markdown(f"- {fact}")
 

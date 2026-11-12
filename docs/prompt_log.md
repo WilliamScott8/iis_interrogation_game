@@ -26,6 +26,21 @@ prompt is materially edited.
   answer; a failure triggers one regeneration attempt in
   `backend/suspect.py` before falling back to a safe stock line.
 
+## suspect_v2.md
+- **2026-11-12** — Replaced v1. Two problems fixed:
+  1. v1 hard-coded a different case ("the Ashworth Diamond Necklace from the
+     Blackwood Gallery") left over from an earlier story, which contradicted
+     the Canalside casino facts in `common_knowledge`. The opening line is now
+     story-agnostic and points at the shared facts instead.
+  2. v1 never gave the model `ground_truth` or `plot_hole`, so guilty
+     suspects did not know they were guilty and could not cover for anything.
+     v2 adds a private `{private_truth}` section, built in
+     `backend/suspect.py` (`_private_truth`): guilty suspects are told their
+     alibi is a cover story, what really happened, and the scripted
+     confrontation lines for their plot hole; innocent suspects are told
+     their account is true. A rule was added against revealing this section
+     directly; the validator's CONFESSES check still backs this up.
+
 <!--
 Add new entries below as prompts evolve, e.g.:
 
