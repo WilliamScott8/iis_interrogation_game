@@ -4,6 +4,9 @@ Filled by backend/suspect.py using str.format(**fields). Keep every
 placeholder below in curly braces exactly as named — the code looks them up
 by name, not by position.
 
+The knowledge_scope placeholder is the suspect's `knowledge_scope` list from story_a.yaml,
+rendered as bullets. The router also uses it to classify questions.
+
 {private_section} is built in code (`_private_section`): guilty suspects get
 their `cover_story` and `secret` from story_a.yaml; innocent suspects are told
 their account is true. `ground_truth` and `plot_hole` are NOT shown to the
@@ -24,6 +27,9 @@ interviewing you about tonight's incident, described in the shared facts below.
 
 # Your account of your own movements, if asked
 {alibi}
+
+# What you know about tonight (details of your own night and openings)
+{knowledge_scope}
 
 {private_section}
 

@@ -1,8 +1,7 @@
 """
 Suspect: wraps one suspect's story data + conversation history and is the
 single entry point the UI calls to ask a question. Internally it chains
-router -> policy -> llm.client -> validator for every turn (or returns a
-scripted line when the detective raises a guilty suspect's plot hole), and
+router -> policy -> llm.client -> validator for every turn, and
 keeps the per-question log that storage.py later exports for analysis.
 """
 
@@ -59,21 +58,6 @@ class Suspect:
     def questions_remaining(self) -> int:
         return MAX_QUESTIONS - len(self.log)
 
-    def _confrontation_line(self, question: str) -> str | None:
-        """If the question raises the suspect's plot hole (keyword match on
-        `confrontation.triggers`), return the scripted line for this stage:
-        line 1 the first time, the last line on every later confrontation.
-        The stage is counted from the log, so it needs no extra state."""
-        confrontation = self.data.get("confrontation")
-        if not confrontation:
-            return None
-        q = question.lower()
-        if not any(trigger in q for trigger in confrontation["triggers"]):
-            return None
-        times = sum(1 for entry in self.log if entry["classification"] == "confrontation")
-        lines = confrontation["lines"]
-        return lines[min(times, len(lines) - 1)]
-
     def _generate_answer(self, question: str, classification: str) -> tuple[str, str]:
         """LLM answer for a normal turn, checked by the validator with one
         firmer retry before falling back to a stock line."""
@@ -84,6 +68,7 @@ class Suspect:
             background=self.data["background"],
             common_knowledge=self.common_knowledge,
             alibi=self.data["alibi_given_to_player"],
+            knowledge_scope="\n".join(f"- {item}" for item in self.data["knowledge_scope"]),
             private_section=_private_section(self.data),
             turn_instruction=policy.get_turn_instruction(classification, self.data),
         )
@@ -108,17 +93,8 @@ class Suspect:
         if self.questions_remaining() <= 0:
             raise ValueError(f"{self.name} has already answered the maximum of {MAX_QUESTIONS} questions.")
 
-        line = self._confrontation_line(question)
-        if line is not None:
-            # Detective is challenging the cover story with the planted plot
-            # hole. The reply is the story's scripted line, returned verbatim:
-            # small local models paraphrase it and invent new times otherwise.
-            classification = "confrontation"
-            answer = line
-            outcome = "SCRIPTED"
-        else:
-            classification = router.classify_question(question, self.data)
-            answer, outcome = self._generate_answer(question, classification)
+        classification = router.classify_question(question, self.data)
+        answer, outcome = self._generate_answer(question, classification)
 
         self.history.append({"role": "user", "content": question})
         self.history.append({"role": "assistant", "content": answer})
