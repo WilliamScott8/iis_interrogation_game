@@ -18,6 +18,7 @@ from ui.components import (
     confidence_slider,
     evidence_list,
     question_counter,
+    safe_openings_list,
     verdict_options,
 )
 
@@ -68,8 +69,10 @@ def _evidence_tab() -> None:
     st.markdown(f"**Stolen item:** {sheet['stolen_item']}")
     st.markdown(f"**Location:** {sheet['location']}")
     st.markdown(f"**Theft window:** {sheet['theft_window']}")
-    st.markdown("**Known facts:**")
-    evidence_list(sheet["facts"])
+    st.markdown("**Safe openings:**")
+    safe_openings_list(sheet["safe_openings"])
+    st.markdown("**Other facts:**")
+    evidence_list(sheet["other_facts"])
 
     st.divider()
     st.info(

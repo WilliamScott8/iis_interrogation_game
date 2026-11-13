@@ -26,22 +26,35 @@ evidence_sheet:
   stolen_item: "£20,000 in cash from the back-room safe"
   location: "The back room behind the cage (cash desk)"
   theft_window: 22:00 on the 5th November - 06:00 on the 6th November
-  facts:
+
+  safe_openings:
+    - opening: "Opening 1: 23:02 to 23:12 - Neil Ashcroft + Jade Okafor. VIP Cash Deposit" 
+      notes:
+      - "A high stakes player handed £11,000 in cash to the cage"
+      - "Cash was counted twice at the customers request; signed by the customer at 23:11"
+
+    - opening: "Opening 2: 00:40 to 00:49 - Neil Ashcroft + Danny Reeve. Jackpot Payout" 
+      notes:
+      - "A player won an £8,000 jackpot, paid manually from the casino cage"
+      - "Customer fetched driving licence from his car; signed by the customer at 00:48"
+
+    - opening: "Opening 3: 01:10 to 01:21 - Sarah Lyle + Danny Reeve. Table Cash Drop"
+      notes:
+      - "A table cash drop of £10,000 was taken from the gaming tables and put in the cage"
+      - "Handwritten note: 'Box 6 lock stiff'"
+
+    - opening: "Opening 4: 02:30 to 02:39 - Sarah Lyle + Jade Okafor. Cage Refill"
+      notes:
+      - "£7,000 was taken from the cage to refill tables and machines"
+      - "Counting machine error: jam at 02:33"
+  
+  other_facts:
     - "22:00 shift-handover count: safe balanced."
     - "Safe rule: one cage person and one floor person must open it together. A normal opening takes about 3 minutes."
-    - "Safe log, opening 1: 23:02 to 23:12 (10 min). Paperwork: VIP cash deposit, Neil Ashcroft + Jade Okafor."
-    - "Safe log, opening 2: 00:40 to 00:49 (9 min). Paperwork: jackpot payout, Neil Ashcroft + Danny Reeve."
-    - "Safe log, opening 3: 01:10 to 01:21 (11 min). Paperwork: table cash drop, Sarah Lyle + Danny Reeve."
-    - "Safe log, opening 4: 02:30 to 02:39 (9 min). Paperwork: cage refill, Sarah Lyle + Jade Okafor."
     - "06:00 morning count: safe £20,000 short."
-    - "VIP deposit receipt: 'Counted twice at the guest's request.' Signed by the guest at 23:11."
-    - "Jackpot payout form: 'ID: driving licence, fetched from the winner's car.' ID verified at 00:48."
-    - "Drop slip, opening 3: handwritten note, 'Box 6 lock stiff.'"
-    - "Counting-machine error log: jam at 02:33."
-    - "Maintenance call log: one call, 21:40, leaking tap in the staff toilets. No other calls that night."
+    - "Counting-machine error log (One item): Jam at counting machine at 02:33."
+    - "Maintenance call log (One item): Leaking tap in the staff toilets at 21:40."
     - "Cage incident book: last entry Thursday, a customer dispute over chips."
-    - "Staff break sheet: Jade 03:30 to 04:00, Sarah 04:00 to 04:30, Danny 04:30 to 05:00, Neil 05:00 to 05:20."
-    - "Cloakroom log: 312 coats checked in."
     - "00:15: lights on the slot floor dipped for a few seconds."
     - "01:45: a man asked at the cage window what time the night shift ends."
     - "03:20: the staff exit was found propped open."

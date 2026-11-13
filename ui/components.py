@@ -29,6 +29,15 @@ def evidence_list(facts: list[str]) -> None:
         st.markdown(f"- {fact}")
 
 
+def safe_openings_list(openings: list[dict]) -> None:
+    """Each opening as a bold heading line with its notes as sub-bullets."""
+    for entry in openings:
+        label, _, detail = entry["opening"].partition(":")
+        lines = [f"- **{label.strip()}:** {detail.strip()}" if detail else f"- **{label.strip()}**"]
+        lines += [f"    - {note}" for note in entry.get("notes") or []]
+        st.markdown("\n".join(lines))
+
+
 def confidence_slider(suspect: Suspect, verdict: str, current: int) -> int:
     """0-100% confidence in the chosen verdict; disabled while undecided."""
     undecided = verdict == "undecided"
