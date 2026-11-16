@@ -30,12 +30,17 @@ def welcome_screen() -> None:
 
     st.subheader("Before you begin")
     st.write(
-        "You will play as the detective and interview four suspects. Your "
-        "answers stay anonymous. With your permission, we'd like to record "
-        "the questions you ask, the suspects' responses, and your final "
-        "verdicts for research into how people respond to AI characters "
-        "during interrogation. No identifying information is collected."
-    )
+    "You will play as the detective and interview four suspects. "
+    "When you begin, you will be presented with some information about the night on the Evidence Sheet tab. "
+    "You will then question each suspect in the Interrogation Room tab. "
+    "One you have asked all the questions you wish (Max 5 per suspect), you will decide if each suspect is Guilty, Innocent, or Undecided in the Verdict Form tab.\n\n"
+    "This game should take roughly 15 minutes to complete, and please only play once\n\n"
+    "Do not refresh your screen while playing, as the game will reset.\n\n"
+    "Your answers stay anonymous. With your permission, we'd like to record "
+    "the questions you ask, the suspects' responses, and your final "
+    "verdicts for research into how people respond to AI characters "
+    "during interrogation. No identifying information is collected."
+)
     consent = st.checkbox("I agree to let my anonymous session data be recorded for this research.")
 
     if st.button("Begin the case", disabled=not consent):
@@ -161,4 +166,12 @@ def summary_screen() -> None:
 
     st.divider()
     st.write(f"You correctly identified **{correct_count} / {len(suspects)}** suspects.")
-    st.write("Thank you for playing. Your anonymous responses have been recorded for the study.")
+
+    st.subheader("What really happened")
+    st.write(session.get_story()["solution"])
+
+    st.divider()
+    st.success(
+        "Thank you so much for playing! Your time really means a lot and genuinely "
+        "helps this research. Your anonymous responses have been recorded for the study."
+    )

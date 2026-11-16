@@ -17,7 +17,9 @@ case_briefing: |
   The back-room safe needs two people to open it: one from the cage (the cash desk)
   and one from the floor (the gaming tables or security). Its log records when the
   door opened and closed, but not who opened it. At the 06:00 count the safe was
-  £20,000 short. Four staff opened it overnight, in pairs. Interview them and decide
+  £20,000 short. Each suspect has been involved in 2 separate safe openings. 
+  It is suspected that the theft occured on one of these openings, and at least 2 of 
+  the suspects are involved in this theft. Interview them and decide
   who is guilty.
 
 # Shown to the player on the evidence sheet screen, verbatim.
@@ -28,29 +30,29 @@ evidence_sheet:
   theft_window: 22:00 on the 5th November - 06:00 on the 6th November
 
   safe_openings:
-    - opening: "Opening 1: 23:02 to 23:12 - Neil Ashcroft + Jade Okafor. VIP Cash Deposit" 
+    - opening: "Opening 1: 23:02 to 23:08 - Neil Ashcroft + Jade Okafor. VIP Cash Deposit" 
       notes:
-      - "A high stakes player handed £11,000 in cash to the cage"
-      - "Cash was counted twice at the customers request; signed by the customer at 23:11"
+      - "A high-stakes guest handed in £11,000 in cash at the cage window, to go in the safe"
+      - "Deposits over £10,000 need a source-of-funds form; signed by the guest at 23:07"
 
-    - opening: "Opening 2: 00:40 to 00:49 - Neil Ashcroft + Danny Reeve. Jackpot Payout" 
+    - opening: "Opening 2: 00:40 to 00:46 - Neil Ashcroft + Danny Reeve. Jackpot Payout" 
       notes:
-      - "A player won an £8,000 jackpot, paid manually from the casino cage"
-      - "Customer fetched driving licence from his car; signed by the customer at 00:48"
+      - "A player won an £8,000 jackpot, paid out in cash from the safe"
+      - "The winner asked for the cash to be counted again; payout form signed by the winner at 00:45"
 
-    - opening: "Opening 3: 01:10 to 01:21 - Sarah Lyle + Danny Reeve. Table Cash Drop"
+    - opening: "Opening 3: 01:10 to 01:16 - Sarah Lyle + Danny Reeve. Table Cash Drop"
       notes:
-      - "A table cash drop of £10,000 was taken from the gaming tables and put in the cage"
+      - "£10,000 from the gaming tables' drop boxes was put into the safe"
       - "Handwritten note: 'Box 6 lock stiff'"
 
-    - opening: "Opening 4: 02:30 to 02:39 - Sarah Lyle + Jade Okafor. Cage Refill"
+    - opening: "Opening 4: 02:30 to 02:35 - Sarah Lyle + Jade Okafor. Cage Refill"
       notes:
-      - "£7,000 was taken from the cage to refill tables and machines"
+      - "£7,000 was taken from the safe to top up the cashiers' float in the cage"
       - "Counting machine error: jam at 02:33"
   
   other_facts:
     - "22:00 shift-handover count: safe balanced."
-    - "Safe rule: one cage person and one floor person must open it together. A normal opening takes about 3 minutes."
+    - "Safe rule: one cage person and one floor person must open it together, and the door stays open until the paperwork for the cash is signed. A normal opening takes about 3 minutes."
     - "06:00 morning count: safe £20,000 short."
     - "Counting-machine error log (One item): Jam at counting machine at 02:33."
     - "Maintenance call log (One item): Leaking tap in the staff toilets at 21:40."
@@ -58,6 +60,19 @@ evidence_sheet:
     - "00:15: lights on the slot floor dipped for a few seconds."
     - "01:45: a man asked at the cage window what time the night shift ends."
     - "03:20: the staff exit was found propped open."
+
+# Shown to the player on the Case Closed screen, after verdicts are submitted.
+solution: |
+  Sarah and Danny both said the box 6 lock jammed during the 01:10 table drop,
+  and that Danny radioed maintenance, who talked him through freeing it. But the
+  maintenance call log shows only one call all night: a leaking tap at 21:40.
+  No call was ever made, so the "stiff lock" was a cover story for why the drop
+  ran long. Sarah and Danny used those 6 minutes to hide the £20,000 in a
+  playing-card box marked for shredding, which Danny took to his car at the end
+  of his shift. The other openings also ran a little over the usual 3 minutes,
+  but each had a genuine reason backed by its own record: the signed
+  source-of-funds form (23:07), the signed jackpot payout form (00:45) and the
+  counting-machine error log (02:33).
 
 # Facts every suspect is allowed to reference about the night in general
 # (shared context, injected into every suspect's system prompt).
@@ -67,11 +82,15 @@ common_knowledge: |
   - The Canalside is a small casino: eight gaming tables, a slot floor, the cage
     (cash desk) and a back room behind the cage where the safe is kept.
   - The safe is old and needs two keys: one held by cage staff, one by floor staff.
-    Its alarm panel logs only when the door opens and closes, not who opened it.
+    Its log records only when the door opens and closes, not who opened it.
   - Reasons to open the safe: VIP cash deposits, jackpot payouts, table cash drops
     (moving cash from the locked drop boxes under the tables into the safe) and
-    cage refills (topping up the cashiers' float). A normal opening takes about
-    3 minutes.
+    cage refills (topping up the cashiers' float). The door stays open until the
+    paperwork for the cash is signed, then it is closed. A normal opening takes
+    about 3 minutes.
+  - House rule: any cash deposit over £10,000 needs a source-of-funds form, filled
+    in and signed by the customer, before the cash can go in the safe.
+  - Customers never go into the back room. They deal with staff at the cage window.
   - The night's safe rota is posted in the back room. Everyone knows the four jobs
     and pairs: VIP deposit (Neil + Jade), jackpot payout (Neil + Danny), table drop
     (Sarah + Danny), cage refill (Sarah + Jade).
@@ -89,20 +108,22 @@ suspects:
     background: "57. Has worked at the Canalside for 19 years. Motive players can find by asking: head office is moving him to a smaller venue next year, which he resents."
     knowledge_scope:
       - "His night: duty office and walking the floor; 22:00 handover count (safe balanced); break 05:00 to 05:20; present at the 06:00 count."
-      - "Opening 1 (VIP deposit, with Jade): the guest asked for his £11,000 to be counted twice, then signed the receipt. That is why it ran long."
-      - "Opening 2 (jackpot payout, with Danny): the winner had no ID on him, so he went to his car for his driving licence; they waited with the safe open until it was verified."
+      - "Opening 1 (VIP deposit, with Jade): the guest handed his cash in at the cage window. Neil and Jade opened the safe and counted it: £11,000. That is over the £10,000 limit, so house rules said the guest had to fill in and sign a source-of-funds form before it could go in. The form needs the counted amount, so it could only be done after the count. Neil took the form to the guest at the cage window while Jade stayed with the cash at the open safe. The guest wrote that the money came from selling his narrowboat, and signed at 23:07. The cash went in and the door was closed. That is why it ran long."
+      - "Opening 2 (jackpot payout, with Danny): Neil and Danny took £8,000 from the safe. Neil counted it out to the winner at the cage window while Danny stayed by the open safe. The winner lost track partway and asked for it to be counted again before he would sign, so Neil counted it again. The winner signed the payout form at 00:45 and the door was closed. That is why it ran long."
       - "Safe procedure from a manager's point of view: the two-key rule and the rota."
     alibi_given_to_player: |
-      "Two openings for me. The first was a VIP deposit with Jade. The guest wanted
-      his cash counted twice, so we did, and he signed the receipt. The second was a
-      jackpot payout with Danny. The winner had no ID, so he had to fetch his licence
-      from his car. Rules are rules: we waited. The rest of the night I was in the
-      duty office or on the floor."
+      "Two openings for me. The first was a VIP deposit with Jade. We counted the
+      guest's cash at the safe and it came to £11,000. Anything over £10,000 needs a
+      source-of-funds form, so I took it to him at the window while Jade stayed with
+      the cash. He signed, and it went in. The second was a jackpot payout with Danny.
+      I counted the £8,000 out to the winner at the window. He lost track and asked
+      for it to be counted again, so I did, and he signed. Rules are rules. The rest
+      of the night I was in the duty office or on the floor."
     ground_truth: "Exactly as he says. Both of his openings ran long for genuine, documented reasons. He knows nothing about the theft."
-    plot_hole: "None. Both explanations match the documents (VIP receipt signed 23:11; jackpot ID verified 00:48)."
+    plot_hole: "None. Both explanations match the documents (source-of-funds form signed 23:07; jackpot payout form signed 00:45)."
     out_of_scope_examples:
       - "What happened at the 01:10 table drop?"
-      - "Why did the 02:30 refill take nine minutes?"
+      - "Why did the 02:30 refill take five minutes?"
       - "Has that VIP made cash deposits like that before?"
       - "Was the jackpot winner a regular?"
       - "Did you notice the lights dip at quarter past midnight?"
@@ -118,19 +139,20 @@ suspects:
     background: "31. Three years at the Canalside. Motive players can find by asking: she was passed over for head of security this summer."
     knowledge_scope:
       - "Her night: hourly patrols of the floor and car park; break 03:30 to 04:00."
-      - "Opening 1 (VIP deposit, with Neil): she stood by while the guest's cash was counted twice, then he signed."
+      - "Opening 1 (VIP deposit, with Neil): she and Neil counted the guest's cash at the safe and it came to £11,000, over the £10,000 limit, so the guest had to fill in a source-of-funds form. Neil took it to him at the cage window while she stayed with the cash at the open safe. She heard the guest say the money came from selling his narrowboat. He signed, the cash went in and the door was closed."
       - "Opening 4 (cage refill, with Sarah): the counting machine jammed partway through; they cleared it and re-ran the count."
       - "Safe procedure from a security officer's point of view: the two-key rule and escorting cash."
     alibi_given_to_player: |
-      "I did two of them. The VIP deposit with Neil: the guest wanted every note
-      counted twice, so I stood there for ten minutes watching. Then the refill with
+      "I did two of them. The VIP deposit with Neil: the guest's cash came to over
+      ten grand, so he had to fill in a source-of-funds form. Neil sorted that with
+      him at the window while I minded the cash at the safe. Then the refill with
       Sarah: the counting machine jammed halfway, so we cleared it and ran the count
       again. Otherwise I was on patrol all night, floor and car park."
     ground_truth: "Exactly as she says. Both of her openings ran long for genuine, documented reasons. She knows nothing about the theft."
-    plot_hole: "None. Both explanations match the documents (VIP receipt signed 23:11; counting-machine jam logged 02:33)."
+    plot_hole: "None. Both explanations match the documents (source-of-funds form signed 23:07; counting-machine jam logged 02:33)."
     out_of_scope_examples:
       - "What happened at the 00:40 jackpot payout?"
-      - "Why did the 01:10 table drop take eleven minutes?"
+      - "Why did the 01:10 table drop take six minutes?"
       - "Has that VIP done this before?"
       - "Has the counting machine jammed before?"
       - "Did you see who propped the staff exit open at 03:20?"
@@ -146,7 +168,7 @@ suspects:
     background: "38. Six years at the Canalside. Motive players can find by asking: she is going through a divorce and has to sell her house."
     knowledge_scope:
       - "Her night: in the cage all night except her two openings; break 04:00 to 04:30."
-      - "Opening 3 (table drop, with Danny, 01:10 to 01:21, 11 min): she says the box 6 lock jammed, Danny radioed maintenance and they talked him through freeing it, so the drop ran long. She wrote 'Box 6 lock stiff' on the drop slip."
+      - "Opening 3 (table drop, with Danny, 01:10 to 01:16, 6 min): she says the box 6 lock jammed, Danny radioed maintenance and they talked him through freeing it, so the drop ran long. She wrote 'Box 6 lock stiff' on the drop slip."
       - "Anything about what happened during her own two openings: who did what, why they took as long as they did."
       - "Opening 4 (cage refill, with Jade): the counting machine jammed partway through; they cleared it and re-ran the count. This is true."
       - "Safe procedure from a cashier's point of view: the two-key rule, drops and refills."
@@ -157,7 +179,7 @@ suspects:
       and we had to clear it and count again. The rest of the night I was in the cage."
     ground_truth: |
       Guilty. Sarah and Danny went to school together but hide it at work. During
-      opening 3 (01:10 to 01:21) they moved £20,000 in bundles into an empty playing-card
+      opening 3 (01:10 to 01:16) they moved £20,000 in bundles into an empty playing-card
       box marked for shredding, which goes out with the waste. The lock never jammed;
       nobody called maintenance. Sarah wrote the "lock stiff" note as cover. Her account
       of opening 4 is true.
@@ -183,7 +205,7 @@ suspects:
         - "Maybe he sorted it himself. I was busy with the bags, I didn't watch him the whole time."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
-      - "Why did the 00:40 jackpot payout take nine minutes?"
+      - "Why did the 00:40 jackpot payout take six minutes?"
       - "Has the box 6 lock jammed on previous nights?"
       - "Has the counting machine jammed on previous nights?"
       - "Who was the man asking at the cage window about shift times?"
@@ -199,18 +221,19 @@ suspects:
     background: "45. Eight years at the Canalside. Motive players can find by asking: he is behind on a loan and money is tight."
     knowledge_scope:
       - "His night: supervising the gaming tables; break 04:30 to 05:00."
-      - "Opening 2 (jackpot payout, with Neil): the winner had no ID, so they waited while he fetched his driving licence from his car. This is true."
-      - "Opening 3 (table drop, with Sarah, 01:10 to 01:21, 11 min): he says the box 6 lock jammed, he radioed maintenance and they talked him through freeing it, so the drop ran long."
+      - "Opening 2 (jackpot payout, with Neil): they took £8,000 from the safe and Neil counted it out to the winner at the cage window while Danny stayed by the open safe. The winner lost track partway and asked for it to be counted again before he would sign. This is true."
+      - "Opening 3 (table drop, with Sarah, 01:10 to 01:16, 6 min): he says the box 6 lock jammed, he radioed maintenance and they talked him through freeing it, so the drop ran long."
       - "Anything about what happened during his own two openings: who did what, why they took as long as they did."
       - "Safe procedure from a pit boss's point of view: the two-key rule and table drops."
     alibi_given_to_player: |
-      "Two for me. The jackpot with Neil: the lucky fella had no ID, so we stood there
-      while he ran to his car for his licence. Then the table drop with Sarah: the lock
+      "Two for me. The jackpot with Neil: eight grand, and the lucky fella lost count
+      halfway and wanted it all counted again before he'd sign. I kept an eye on the
+      safe while Neil did it at the window. Then the table drop with Sarah: the lock
       on box 6 jammed solid. I radioed maintenance and they talked me through freeing
       it. Took a few minutes, that's all. Rest of the night I was running the tables."
     ground_truth: |
       Guilty. Danny and Sarah went to school together but hide it at work. During
-      opening 3 (01:10 to 01:21) they moved £20,000 in bundles into an empty playing-card
+      opening 3 (01:10 to 01:16) they moved £20,000 in bundles into an empty playing-card
       box marked for shredding. At the end of his shift Danny took the box from the
       shredding bin to his car. The lock never jammed; he never called maintenance.
       His account of opening 2 is true.
@@ -236,7 +259,7 @@ suspects:
         - "Maybe I sorted it myself and didn't need to call."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
-      - "Why did the 02:30 refill take nine minutes?"
+      - "Why did the 02:30 refill take five minutes?"
       - "Was the jackpot winner a regular?"
       - "Has the box 6 lock jammed on previous nights?"
       - "Did you see who propped the staff exit open at 03:20?"

@@ -8,7 +8,7 @@
 
 # --- Neil (innocent, decline) ---
 - suspect_id: neil
-  question: "Why did the VIP deposit take ten minutes?"
+  question: "Why did the VIP deposit take six minutes?"
   expected: in_context
 
 - suspect_id: neil
@@ -16,7 +16,7 @@
   expected: in_context
 
 - suspect_id: neil
-  question: "Why did the 01:10 table drop take eleven minutes?"
+  question: "Why did the 01:10 table drop take six minutes?"
   expected: out_of_context
 
 # --- Jade (innocent, improvise) ---
@@ -25,7 +25,7 @@
   expected: in_context
 
 - suspect_id: jade
-  question: "Why did the jackpot payout take nine minutes?"
+  question: "Why did the jackpot payout take six minutes?"
   expected: out_of_context
 
 # --- Sarah (guilty, decline) — the drop she did with Danny ---
@@ -38,7 +38,7 @@
   expected: in_context
 
 - suspect_id: sarah
-  question: "Why did the table drop take 11 minutes?"
+  question: "Why did the table drop take 6 minutes?"
   expected: in_context
 
 - suspect_id: sarah
@@ -59,11 +59,11 @@
   expected: in_context
 
 - suspect_id: danny
-  question: "Why did the table drop take 11 minutes?"
+  question: "Why did the table drop take 6 minutes?"
   expected: in_context
 
 - suspect_id: danny
-  question: "Why did the 02:30 refill take nine minutes?"
+  question: "Why did the 02:30 refill take five minutes?"
   expected: out_of_context
 
 - suspect_id: danny
