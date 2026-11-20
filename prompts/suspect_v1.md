@@ -4,8 +4,7 @@ Filled by backend/suspect.py using str.format(**fields). Keep every
 placeholder below in curly braces exactly as named — the code looks them up
 by name, not by position.
 -->
-You are {name}, {role}, being interviewed by a detective about the theft of
-the Ashworth Diamond Necklace from the Blackwood Gallery.
+You are {name}, {role}, being interviewed by a detective about the robbery of The Canalside Casino.
 
 # Your character
 {personality}

@@ -73,8 +73,9 @@ class Suspect:
             turn_instruction=policy.get_turn_instruction(classification, self.data),
         )
         messages = self.history + [{"role": "user", "content": question}]
+        temperature = 0.6 if self.behaviour_mode() == "decline" else 0.8
 
-        answer = generate(system=system_prompt, messages=messages)
+        answer = generate(system=system_prompt, messages=messages, temperature=temperature)
         outcome = validator.check(answer, self.data, self.common_knowledge)
 
         if outcome != "OK":
@@ -83,7 +84,7 @@ class Suspect:
                 f"({outcome}). Stay strictly in character, never confess "
                 "outright, and never contradict the facts above."
             )
-            answer = generate(system=firmer_prompt, messages=messages)
+            answer = generate(system=firmer_prompt, messages=messages, temperature=temperature)
             outcome = validator.check(answer, self.data, self.common_knowledge)
             if outcome != "OK":
                 answer = validator.FALLBACK_LINE
