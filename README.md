@@ -110,10 +110,9 @@ iis_interrogation_game/
 │                                    their planted plot holes
 │
 ├── prompts/                      ← prompt templates, filled via str.format()
-│   ├── suspect_v3.md               ← builds each suspect's system prompt
-│   ├── suspect_v1.md, suspect_v2.md ← superseded; kept for the prompt log
-│   ├── router_v1.md                ← the in/out-of-context classifier prompt
-│   └── validator_v1.md             ← the post-hoc answer-check prompt
+│   ├── suspect.md                  ← builds each suspect's system prompt
+│   ├── router.md                   ← the in/out-of-context classifier prompt
+│   └── validator.md                ← the post-hoc answer-check prompt
 │
 ├── tests/
 │   ├── cases.yaml                 ← hand-written question -> expected
@@ -144,7 +143,7 @@ iis_interrogation_game/
    declared `knowledge_scope` in `story_a.yaml`.
 3. `policy.get_turn_instruction()` turns that label, plus the suspect's fixed
    `behaviour_mode` (decline/improvise), into an instruction for this turn.
-4. The suspect's system prompt (`prompts/suspect_v3.md`) is filled in with
+4. The suspect's system prompt (`prompts/suspect.md`) is filled in with
    their personality, background, alibi, the shared case facts, their
    private section (see below), and that instruction, and sent to the local
    Ollama model via `llm/client.py`.

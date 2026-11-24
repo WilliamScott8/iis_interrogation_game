@@ -8,7 +8,7 @@ decides whether the decline/improvise behaviour should kick in at all.
 from llm.client import generate
 from backend import load_prompt
 
-_TEMPLATE = load_prompt("router_v1.md")
+_TEMPLATE = load_prompt("router.md")
 
 
 def classify_question(question: str, suspect: dict) -> str:

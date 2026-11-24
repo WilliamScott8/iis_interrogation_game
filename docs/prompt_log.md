@@ -2,8 +2,13 @@
 
 Record every meaningful change to a prompt in `prompts/`, in order, so the
 reasoning behind the current version is traceable. Add a new entry — don't
-edit old ones — each time a `_v2`, `_v3`, ... file is added or an existing
-prompt is materially edited.
+edit old ones — each time a prompt is materially edited.
+
+The prompts now live at unversioned paths (`prompts/suspect.md`,
+`prompts/router.md`, `prompts/validator.md`); earlier entries below use the
+versioned filenames they had at the time. Superseded versions are no longer
+kept as files — recover them from git history (e.g.
+`git show f7998d8:prompts/suspect_v1.md`).
 
 ## suspect_v1.md
 - **2026-10-27** — Initial version. Character system prompt built from
@@ -74,10 +79,18 @@ prompt is materially edited.
   `tests/cases.yaml` was rewritten for the Canalside suspects (it still
   referenced an older story's suspects and could not run).
 
+## Rename to unversioned filenames (prompts unchanged)
+- **2026-11-24** — `router_v1.md` → `router.md`, `suspect_v3.md` →
+  `suspect.md`, `validator_v1.md` → `validator.md`; `suspect_v1.md` and
+  `suspect_v2.md` deleted. Contents unchanged; `load_prompt` calls in
+  `backend/router.py`, `backend/suspect.py` and `backend/validator.py`
+  updated to match. Version history is now tracked by git and this log
+  rather than by filename suffixes.
+
 <!--
 Add new entries below as prompts evolve, e.g.:
 
-## router_v2.md
+## router.md
 - **YYYY-MM-DD** — Changed X because Y (what broke, what evidence showed it,
   what changed).
 -->

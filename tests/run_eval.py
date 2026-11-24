@@ -2,7 +2,7 @@
 """
 Offline prompt eval: runs tests/cases.yaml through the real router against
 the real story data and reports accuracy. This checks the router prompt
-(prompts/router_v1.md), not the UI — run it after any change to that prompt
+(prompts/router.md), not the UI — run it after any change to that prompt
 or to a suspect's knowledge_scope / out_of_scope_examples.
 
 Usage:

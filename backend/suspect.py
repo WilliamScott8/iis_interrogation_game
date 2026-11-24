@@ -10,7 +10,7 @@ from backend import router, policy, validator, load_prompt
 
 MAX_QUESTIONS = 5
 
-_SUSPECT_TEMPLATE = load_prompt("suspect_v3.md")
+_SUSPECT_TEMPLATE = load_prompt("suspect.md")
 
 
 def _private_section(data: dict) -> str:

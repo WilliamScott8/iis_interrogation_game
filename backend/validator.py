@@ -8,7 +8,7 @@ instruction; if that also fails, a safe fallback line is used instead.
 from llm.client import generate
 from backend import load_prompt
 
-_TEMPLATE = load_prompt("validator_v1.md")
+_TEMPLATE = load_prompt("validator.md")
 
 FALLBACK_LINE = "I'd rather not get into that."
 
