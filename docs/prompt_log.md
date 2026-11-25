@@ -87,6 +87,20 @@ kept as files — recover them from git history (e.g.
   updated to match. Version history is now tracked by git and this log
   rather than by filename suffixes.
 
+## Confrontation lines removed (story data change, prompts unchanged)
+- **2026-11-25** — Removed the `confrontation` blocks (trigger phrases +
+  scripted lines) and the "Confrontation line" text in `plot_hole` for Sarah
+  and Danny in `story_a.yaml`. The handling described in the suspect_v3 entry
+  was no longer in `Suspect.ask()`, so the data was unused. Questions about
+  the maintenance call log now go through the router like any other: no
+  suspect is told what the log contains, so they are OUT_OF_CONTEXT and get
+  the suspect's decline/improvise instruction. Four such cases added to
+  `tests/cases.yaml`; all 19 cases pass (3 runs). Adding the log to the
+  guilty suspects' `out_of_scope_examples` was tried and dropped: the router
+  then marked Sarah's "Did you radio maintenance about the box 6 lock?" as
+  OUT_OF_CONTEXT (18/19), and the log questions were already classified
+  correctly without it.
+
 <!--
 Add new entries below as prompts evolve, e.g.:
 

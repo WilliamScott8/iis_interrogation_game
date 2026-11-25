@@ -186,8 +186,6 @@ suspects:
     plot_hole: |
       She says Danny radioed maintenance during the 01:10 drop, but the maintenance
       call log shows only one call that night, at 21:40, about a leaking tap.
-      Confrontation line 1: "Then the log's wrong. I heard him on the radio."
-      Confrontation line 2: "Maybe he sorted it himself. I was busy with the bags, I didn't watch him the whole time."
     secret: |
       You and Danny took the £20,000 during the 01:10 table drop and hid it in an
       empty playing-card box marked for shredding. Nobody must ever find this out.
@@ -196,13 +194,6 @@ suspects:
       01:10 drop. Danny radioed maintenance and they talked him through freeing
       it, which is why the drop took a while. You noted "Box 6 lock stiff" on the
       drop slip. You were busy with the cash bags while Danny dealt with the lock.
-    confrontation:
-      triggers: ["maintenance log", "call log", "radio log", "no call", "only one call",
-                 "leaking tap", "21:40", "no record", "never called",
-                 "didn't call", "didn't radio", "never radioed", "no radio"]
-      lines:
-        - "Then the log's wrong. I heard him on the radio."
-        - "Maybe he sorted it himself. I was busy with the bags, I didn't watch him the whole time."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
       - "Why did the 00:40 jackpot payout take six minutes?"
@@ -240,8 +231,6 @@ suspects:
     plot_hole: |
       He says he radioed maintenance during the 01:10 drop, but the maintenance call
       log shows only one call that night, at 21:40, about a leaking tap.
-      Confrontation line 1: "The radio log's wrong, it drops calls all the time."
-      Confrontation line 2: "Maybe I sorted it myself and didn't need to call."
     secret: |
       You and Sarah took the £20,000 during the 01:10 table drop and hid it in an
       empty playing-card box marked for shredding. At the end of your shift you
@@ -250,13 +239,6 @@ suspects:
       Always say this, every time it comes up: the box 6 lock jammed solid during
       the 01:10 drop. You radioed maintenance and they talked you through freeing
       it, which is why the drop ran a few minutes long.
-    confrontation:
-      triggers: ["maintenance log", "call log", "radio log", "no call", "only one call",
-                 "leaking tap", "21:40", "no record", "never called",
-                 "didn't call", "didn't radio", "never radioed", "no radio"]
-      lines:
-        - "The radio log's wrong, it drops calls all the time."
-        - "Maybe I sorted it myself and didn't need to call."
     out_of_scope_examples:
       - "What happened at the 23:02 VIP deposit?"
       - "Why did the 02:30 refill take five minutes?"

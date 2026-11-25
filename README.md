@@ -83,8 +83,7 @@ iis_interrogation_game/
 │   │                              (router -> policy -> llm -> validator),
 │   │                              conversation history, the analysis log,
 │   │                              `_private_section()` (what each suspect must
-│   │                              claim / hide) and the scripted confrontation
-│   │                              lines
+│   │                              claim / hide)
 │   ├── validator.py             ← post-hoc check on a drafted answer (catches
 │   │                              broken character, outright confessions,
 │   │                              contradicted facts); triggers one retry
@@ -135,10 +134,8 @@ iis_interrogation_game/
 
 1. The player asks a suspect a question in the interrogation screen
    (`ui/screens.py`).
-2. `Suspect.ask()` (`backend/suspect.py`) first checks whether the question
-   confronts a guilty suspect with their plot hole (see below). If so, it
-   returns the story's scripted line and skips steps 3–5. Otherwise it sends
-   the question to `router.classify_question()`,
+2. `Suspect.ask()` (`backend/suspect.py`) sends the question to
+   `router.classify_question()`,
    which labels it IN_CONTEXT or OUT_OF_CONTEXT against that suspect's
    declared `knowledge_scope` in `story_a.yaml`.
 3. `policy.get_turn_instruction()` turns that label, plus the suspect's fixed
@@ -150,8 +147,8 @@ iis_interrogation_game/
 5. `validator.check()` screens the drafted answer for broken character,
    outright confessions, or contradicted facts, and triggers one retry if
    needed.
-6. The question, classification (`in_context`, `out_of_context` or
-   `confrontation`), and answer are appended to that suspect's
+6. The question, classification (`in_context` or `out_of_context`), and
+   answer are appended to that suspect's
    log, which `backend/storage.py` later writes out when the player submits
    their verdicts.
 
@@ -169,16 +166,12 @@ in `backend/suspect.py`:
   researcher and the verdict screen. Small models given the plain truth
   ("he never called maintenance") tend to repeat it.
 
-**Confrontations.** Each guilty suspect also has a `confrontation` block:
-a list of trigger phrases (e.g. "maintenance log", "21:40", "no record")
-and two scripted lines. When a question contains a trigger, the suspect
-replies with line 1 the first time and line 2 on every later
-confrontation. These lines are returned by code, not generated, so the
-planted plot hole plays out exactly as written. They're logged with
-classification `confrontation` and validator outcome `SCRIPTED`. Trigger
-matching is plain substring matching, so a paraphrase that avoids every
-trigger goes through the normal router path. Check the conversation logs
-for misses and add triggers as needed.
+**The plot hole.** No suspect is told what the maintenance call log
+contains, so a question confronting Sarah or Danny with it (no call during
+the 01:10 drop) is classified OUT_OF_CONTEXT and handled by their normal
+decline/improvise instruction. There are no scripted replies; the guilty
+suspects respond to the plot hole the same way as to any other
+out-of-knowledge question. `tests/cases.yaml` covers this.
 
 The validator's CONFESSES check backs up the rule against revealing the
 secret, with one retry.

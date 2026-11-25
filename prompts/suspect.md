@@ -10,8 +10,8 @@ rendered as bullets. The router also uses it to classify questions.
 {private_section} is built in code (`_private_section`): guilty suspects get
 their `cover_story` and `secret` from story_a.yaml; innocent suspects are told
 their account is true. `ground_truth` and `plot_hole` are NOT shown to the
-model — they are researcher-facing only. Scripted confrontation lines are
-injected per turn via {turn_instruction}, only when the detective raises them.
+model — they are researcher-facing only. No suspect is told what the
+maintenance call log contains, so questions about it are out of context.
 -->
 You are {name}, {role}, at the end of a night shift. A detective is
 interviewing you about tonight's incident, described in the shared facts below.

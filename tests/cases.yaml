@@ -2,9 +2,8 @@
 # classification. Run with `python tests/run_eval.py`. These are prompt-eval
 # cases, not unit tests — expect some noise since an LLM classifies them.
 #
-# Note: questions that raise a guilty suspect's plot hole (e.g. the
-# maintenance log) never reach the router — Suspect.ask() catches them with
-# `confrontation.triggers` first — so they are not tested here.
+# Questions that raise a guilty suspect's plot hole (the maintenance call
+# log) must be OUT_OF_CONTEXT: no suspect is told what the log contains.
 
 # --- Neil (innocent, decline) ---
 - suspect_id: neil
@@ -49,6 +48,14 @@
   question: "What happened at the 23:02 VIP deposit?"
   expected: out_of_context
 
+- suspect_id: sarah
+  question: "The maintenance log only shows one call last night, a leaking tap at 21:40. Why isn't Danny's call on it?"
+  expected: out_of_context
+
+- suspect_id: sarah
+  question: "Maintenance have no record of any call during the table drop. Can you explain that?"
+  expected: out_of_context
+
 # --- Danny (guilty, improvise) — the drop he did with Sarah ---
 - suspect_id: danny
   question: "Did you radio maintenance about the box 6 lock?"
@@ -68,4 +75,12 @@
 
 - suspect_id: danny
   question: "Did you see who propped the staff exit open at 03:20?"
+  expected: out_of_context
+
+- suspect_id: danny
+  question: "The maintenance log only shows one call last night, a leaking tap at 21:40. Why isn't your call on it?"
+  expected: out_of_context
+
+- suspect_id: danny
+  question: "Maintenance have no record of any call during the table drop. Can you explain that?"
   expected: out_of_context
