@@ -28,7 +28,7 @@ What it helped with:
 - Suggested changes in prompting when guilty suspects were leaking the truth.
 - Front End: Claude assisted in building the Streamlit user interface screens.
 - Story: Claude helped draft story ideas.
-- README: Suggested layout for README.
+- README: Suggested layout for README. Drafted technical explaination for how questions are answered, what the suspects know
 
 How I changed its suggestions
 - Redesigned a suggested format for the main page (Evidence, Interrogation Room, Verdict Tab).
@@ -70,8 +70,8 @@ The model is set in `.streamlit/secrets.toml`:
 ```toml
 [llm]
 provider = "ollama"
-model = "llama3.2:3b"              # any model pulled with `ollama pull`
-host = "http://localhost:11434"   # Ollama's default address
+model = "llama3.2:3b"
+host = "http://localhost:11434"
 ```
 
 ## Saving Data
@@ -81,6 +81,11 @@ Verdicts saved in data_exports/verdicts.csv
 
 A google sheets form was used in production but disabled here (Commented out in ui/screens.py in _verdict_tab())
 so reviewers don't need credentials
+
+
+
+
+## Project Structure and Technical Explainations ##
 
 ## Project Structure
 
@@ -108,27 +113,25 @@ iis_interrogation_game/
 │   │                              OUT_OF_CONTEXT for a given suspect (one LLM call)
 │   ├── policy.py               ← turns that classification + the suspect's
 │   │                              assigned behaviour_mode into the decline/
-│   │                              improvise instruction — this is where the
-│   │                              study's independent variable is implemented
+│   │                              improvise instruction.
 │   ├── suspect.py              ← Suspect class: the per-question pipeline
 │   │                              (router -> policy -> llm -> validator),
 │   │                              conversation history, the analysis log,
 │   │                              `_private_section()` (what each suspect must
 │   │                              claim / hide)
-│   ├── validator.py            ← post-hoc check on a drafted answer (catches
+│   ├── validator.py            ← Check on a drafted answer (catches
 │   │                              broken character, outright confessions,
 │   │                              contradicted facts); triggers one retry,
 │   │                              then a stock fallback line
 │   └── storage.py              ← writes the completed session's conversation
 │                                  log and verdicts to data_exports/*.csv;
-│                                  can also mirror them to Google Sheets
-│                                  (disabled in ui/screens.py)
+│                                  (can also mirror them to Google Sheets if set up)
 │
 ├── llm/                        ← the only place that talks to the model
 │   ├── __init__.py
 │   └── client.py               ← Ollama wrapper: generate(system, messages)
 │
-├── ui/                         ← everything the player sees
+├── ui/                         ← User Interface
 │   ├── __init__.py
 │   ├── screens.py              ← one function per screen: welcome, case
 │   │                              (tabbed: evidence / interrogation /
@@ -136,7 +139,7 @@ iis_interrogation_game/
 │   ├── components.py           ← reusable render helpers (chat history,
 │   │                              question counter, evidence and safe-opening
 │   │                              lists, confidence slider, verdict options)
-│   └── style.css               ← noir-detective styling layered on the theme
+│   └── style.css
 │
 ├── story/
 │   └── story_a.yaml            ← the case file: case briefing, evidence sheet,
@@ -148,7 +151,7 @@ iis_interrogation_game/
 ├── prompts/                    ← prompt templates, filled via str.format()
 │   ├── suspect.md              ← builds each suspect's system prompt
 │   ├── router.md               ← the in/out-of-context classifier prompt
-│   └── validator.md            ← the post-hoc answer-check prompt
+│   └── validator.md            ← the answer-check prompt
 │
 ├── tests/
 │   ├── cases.yaml              ← hand-written question -> expected
@@ -158,9 +161,9 @@ iis_interrogation_game/
 │
 ├── docs/
 │   ├── prompt_log.md           ← changelog of prompt versions and why
-│   │                              each change was made (A2 requirement)
-│   ├── System_Diagram.pdf      ← architecture diagram of the module flow
-│   ├── AI_Behaviour_Flowchart.pdf ← how a suspect's reply is produced
+│   │                              each change was made
+│   ├── System_Diagram.pdf
+│   ├── AI_Behaviour_Flowchart.pdf
 │   └── storyboards/            ← UI storyboards / mockups go here
 │
 └── data_exports/               ← CSVs of conversations and verdicts written
